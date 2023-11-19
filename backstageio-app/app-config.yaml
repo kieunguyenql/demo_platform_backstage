@@ -98,7 +98,7 @@ catalog:
 
     ## Uncomment these lines to add more example data
     - type: url
-      target: https://github.com/kieunguyenql/demo_platform_backstage/blob/main/template.yaml
+      target: https://github.com/kieunguyenql/demo_platform_backstage/blob/main/backstageio_template/template.yaml
       rules:
         - allow: [Template]
 
