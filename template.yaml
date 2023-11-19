@@ -15,7 +15,6 @@ spec:
       properties:
         name:
           type: string
-
   steps:
     - id: log-message
       name: Log Message
