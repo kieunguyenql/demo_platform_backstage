@@ -37,7 +37,7 @@ integrations:
     - host: github.com
       # This is a Personal Access Token or PAT from GitHub. You can find out how to generate this token, and more information
       # about setting up the GitHub integration here: https://backstage.io/docs/getting-started/configuration#setting-up-a-github-integration
-      token: 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
+      token: xxxxxxxxxxxxxxxxxxxxxxxx
       #${GITHUB_TOKEN}
     ### Example for how to add your GitHub Enterprise instance using the API:
     # - host: ghe.example.net
@@ -47,7 +47,7 @@ integrations:
     - host: gitlab.com
       # This is a Personal Access Token or PAT from GitHub. You can find out how to generate this token, and more information
       # about setting up the GitHub integration here: https://backstage.io/docs/getting-started/configuration#setting-up-a-github-integration
-      token: glpat-MJXtG3y9Hb749jznb-Wg
+      token: xxxxxxxxxxxxxxxxx
 
 proxy:
   ### Example for how to add a proxy endpoint for the frontend.
@@ -95,7 +95,7 @@ catalog:
       target: ../../examples/org.yaml
       rules:
         - allow: [User, Group]
-        
+     
     - type: url
       target: https://github.com/kieunguyenql/demo_platform_backstage/blob/main/backstage_template/template.yaml
       rules:
