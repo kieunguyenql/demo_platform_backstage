@@ -95,8 +95,7 @@ catalog:
       target: ../../examples/org.yaml
       rules:
         - allow: [User, Group]
-
-    ## Uncomment these lines to add more example data
+        
     - type: url
       target: https://github.com/kieunguyenql/demo_platform_backstage/blob/main/backstage_template/template.yaml
       rules:
