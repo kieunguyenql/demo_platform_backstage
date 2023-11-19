@@ -83,8 +83,8 @@ spec:
       name: Trigger GitHub Action
       action: github:actions:dispatch
       input:
-        workflowId: manage-eks-cluster.yml  # GitHub Action workflow ID
-        repoUrl: 'github.com?repo=aws-eks&amp;owner=samgabrail'
+        workflowId: build.yml  # GitHub Action workflow ID
+        repoUrl: 'https://github.com/kieunguyenql/initial-repo'
         branchOrTagName: 'main'  # The branch to run this action on
         workflowInputs:
           LAMBDA_NAME: ${{ parameters.FunctionName }}
