@@ -82,7 +82,7 @@ spec:
       name: Trigger GitLab CI/CD
       action: gitlab:cicd:trigger
       input:
-        projectId: '52313636'  # GitLab project ID
+        projectId: '52321758'  # GitLab project ID
         ref: 'main'  # The branch to run this pipeline on
         variables:
           LAMBDA_NAME: ${{ parameters.FunctionName }}
