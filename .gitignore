@@ -1,57 +1,5 @@
-# macOS
-backstage_application/.DS_Store
-backstage_application/
-backstage_application/# Logs
-backstage_application/logs
-backstage_application/*.log
-backstage_application/npm-debug.log*
-backstage_application/yarn-debug.log*
-backstage_application/yarn-error.log*
-backstage_application/lerna-debug.log*
-backstage_application/
-backstage_application/# Coverage directory generated when running tests with coverage
-backstage_application/coverage
-backstage_application/
-backstage_application/# Dependencies
-backstage_application/node_modules/
-backstage_application/
-backstage_application/# Yarn 3 files
-backstage_application/.pnp.*
-backstage_application/.yarn/*
-backstage_application/!.yarn/patches
-backstage_application/!.yarn/plugins
-backstage_application/!.yarn/releases
-backstage_application/!.yarn/sdks
-backstage_application/!.yarn/versions
-backstage_application/
-backstage_application/# Node version directives
-backstage_application/.nvmrc
-backstage_application/
-backstage_application/# dotenv environment variables file
-backstage_application/.env
-backstage_application/.env.test
-backstage_application/
-backstage_application/# Build output
-backstage_application/dist
-backstage_application/dist-types
-backstage_application/
-backstage_application/# Temporary change files created by Vim
-backstage_application/*.swp
-backstage_application/
-backstage_application/# MkDocs build output
-backstage_application/site
-
-# Local configuration files
-*.local.yaml
-
-# Sensitive credentials
-*-credentials.yaml
-
-# vscode database functionality support files
-*.session.sql
-
 sample-web-app/infras-tf/.terra*
 sample-web-app/infras-tf/terra*
-
+backstageio-app/node_modules
 terraform_ecs_deploy_backstage/demo_backstage_terraform/terra*
 terraform_ecs_deploy_backstage/demo_backstage_terraform/.terra*
