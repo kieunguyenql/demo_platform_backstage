@@ -70,24 +70,28 @@ spec:
         url: ./repo_template  # Where the base content is stored
         values:
           name: ${{ parameters.name }}
-    # Publish the code to a GitLab repo
+    # Publish the code to a GitHub repo
     - id: publish
       name: Publish
-      action: publish:gitlab
+      action: publish:github
       input:
+        allowedHosts: ['github.com']
         description: This is ${{ parameters.name }}
         repoUrl: ${{ parameters.repoUrl }}
     # Trigger a GitLab CI/CD pipeline to set up the EKS cluster
-    - id: gitlab-ci
-      name: Trigger GitLab CI/CD
-      action: gitlab:cicd:trigger
+    - id: github-action
+      name: Trigger GitHub Action
+      action: github:actions:dispatch
       input:
-        projectId: '52321758'  # GitLab project ID
-        ref: 'main'  # The branch to run this pipeline on
-        variables:
+        workflowId: manage-eks-cluster.yml  # GitHub Action workflow ID
+        repoUrl: 'github.com?repo=aws-eks&amp;owner=samgabrail'
+        branchOrTagName: 'main'  # The branch to run this action on
+        workflowInputs:
           LAMBDA_NAME: ${{ parameters.FunctionName }}
           PACKAGE_NAME: "${{ parameters.FunctionName }}-python-packages"
           AWS_DEFAULT_REGION: ${{ parameters.region }}
+
+    # Register the new component in the Backstage catalog
     # Register the new component in the Backstage catalog
     - id: register
       name: Register
