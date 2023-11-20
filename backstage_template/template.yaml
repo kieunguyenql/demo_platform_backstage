@@ -7,7 +7,7 @@ metadata:
   description: Build infras then deploy lambda to AWS
 spec:
   # Who owns this template.
-  owner: user:kieunv
+  owner: user:guest
   # The type of service this template deploys
   type: service
   # User-input parameters, which make templates dynamic
