@@ -35,7 +35,7 @@ spec:
           ui:field: RepoUrlPicker  # A special UI component for selecting repo URLs
           ui:options:
             allowedHosts:
-              - gitlab.com
+              - github.com
   # Parameters for setting up infras
     - title: Lambda configuration
       required:
