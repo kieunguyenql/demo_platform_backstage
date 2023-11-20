@@ -78,7 +78,7 @@ spec:
         allowedHosts: ['github.com']
         description: This is ${{ parameters.name }}
         repoUrl: ${{ parameters.repoUrl }}
-    # Trigger a GitLab CI/CD pipeline to set up the EKS cluster
+    # Trigger a GitLab CI/CD pipeline to set up Lambdas
     - id: github-action
       name: Trigger GitHub Action
       action: github:actions:dispatch
