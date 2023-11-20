@@ -1,0 +1,94 @@
+name: Lambda Deployment
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  LAMBDA_NAME: "demo-backstage"
+  PACKAGE_NAME: "demo-backstage-python-packages"
+  AWS_DEFAULT_REGION: "ap-southeast-2"
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_FPT }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_FPT }}
+jobs:
+  build-infras:
+    runs-on: self-hosted
+    container: python:3.10
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Install Terraform and AWS CLI
+      run: |
+        wget https://releases.hashicorp.com/terraform/1.6.4/terraform_1.6.4_linux_amd64.zip
+        unzip terraform_1.6.4_linux_amd64.zip
+        mv terraform /usr/local/bin/
+        terraform --version
+
+        curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+        unzip awscliv2.zip
+        ./aws/install
+        aws --version
+        
+    - name: Build Infrastructure
+      run: |
+        cd infras-tf
+        terraform init
+        terraform plan
+        terraform apply -auto-approve
+
+  deploy-layer:
+    needs: build-infras
+    runs-on: self-hosted
+    container: python:3.10
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Install necessary tools
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y jq
+        sudo apt-get install zip
+
+        curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+        unzip awscliv2.zip
+        ./aws/install
+        aws --version
+        
+    - name: Deploy Lambda Layer
+      run: |
+        mkdir -p python/lib/python3.10/site-packages/
+        pip install -r requirement.txt --target=python/lib/python3.10/site-packages/
+        zip -qr9 ${{ env.PACKAGE_NAME }}.zip python
+        layer_arn=$(aws lambda publish-layer-version --layer-name ${{ env.PACKAGE_NAME }} --zip-file fileb://${{ env.PACKAGE_NAME }}.zip --compatible-runtimes python3.10 --region ${{ env.AWS_DEFAULT_REGION }} | jq -r '.LayerVersionArn')
+        aws lambda update-function-configuration --function-name ${{ env.LAMBDA_NAME }} --layers $layer_arn
+
+  deploy-lambda-code:
+    needs: deploy-layer
+    runs-on: self-hosted
+    container: python:3.10
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Install necessary tools
+      run: |
+        sudo apt-get update
+        sudo apt-get install zip
+
+        curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+        unzip awscliv2.zip
+        ./aws/install
+        aws --version
+        
+    - name: Deploy Lambda Code
+      run: |
+        zip -r function.zip custom_encoder.py main.py
+        aws lambda update-function-code --function-name ${{ env.LAMBDA_NAME }} --zip-file fileb://function.zip
+        aws lambda wait function-updated --function-name ${{ env.LAMBDA_NAME }}
+        aws lambda update-function-configuration --function-name ${{ env.LAMBDA_NAME }} --region ${{ env.AWS_DEFAULT_REGION }}

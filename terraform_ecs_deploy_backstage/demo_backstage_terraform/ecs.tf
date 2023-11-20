@@ -117,7 +117,7 @@ resource "aws_lb" "demo_backstage_ecs_alb" {
 
 resource "aws_lb_target_group" "demo_backstage_ecs_tgp" {
   name     = "demo-backstage-ecs-tgp"
-  port     = 7000
+  port     = 7007
   protocol = "HTTP"
   vpc_id   = module.demo_vpc.aws_vpc_id
 }
@@ -185,6 +185,7 @@ resource "aws_ecs_task_definition" "demo_backstage_task" {
       {"name": "AUTH_GITHUB_CLIENT_SECRET", "value": "arbirarty-value"},
       {"name": "ACCESS_KEY_ID", "value": "xxxxx"},
       {"name": "SECRET_ACCESS_KEY", "value": "xxxxx"},
+      {"name": "HOST_URL", "value": "xxxxx"},
       {"name": "APP_DOMAIN", "value": "xxxx"},
       {"name": "APP_URL", "value": "xxxxx"},
       {"name": "BACKEND_URL", "value": "xxxxx"},
@@ -202,8 +203,8 @@ resource "aws_ecs_task_definition" "demo_backstage_task" {
     }
     portMappings = [{
     protocol      = "tcp"
-    containerPort = 7000
-    hostPort      = 7000
+    containerPort = 7007
+    hostPort      = 7007
     }]
   }])
 }
