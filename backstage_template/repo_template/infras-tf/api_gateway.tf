@@ -8,12 +8,10 @@ locals {
 }
 
 resource "aws_api_gateway_rest_api" "demo_backstage" {
-  name        = "demo_backstage"
+  name        = var.api_gate_way_name
   description = "demo API"
 }
 
-
-#### API-Gateway-Resource ###############
 resource "aws_api_gateway_resource" "url_path" {
   for_each    = toset(local.url_path)
   path_part   = each.value
@@ -21,7 +19,6 @@ resource "aws_api_gateway_resource" "url_path" {
   parent_id   = aws_api_gateway_rest_api.demo_backstage.root_resource_id
 }
 
-##### API_GATEWAY METHOD ##########################
 resource "aws_api_gateway_method" "health_get" {
   rest_api_id   = aws_api_gateway_rest_api.demo_backstage.id
   resource_id   = aws_api_gateway_resource.url_path["health"].id
@@ -44,7 +41,6 @@ resource "aws_api_gateway_method" "product_curd_medthods" {
   authorization = "NONE"
 }
 
-############API GATEWAY DEPLOYMENT 
 resource "aws_api_gateway_deployment" "demo_backstage" {
   depends_on    = [aws_api_gateway_resource.url_path, aws_api_gateway_method.health_get, aws_api_gateway_method.products_get, aws_api_gateway_method.product_curd_medthods,
                 aws_api_gateway_integration.health_integration, aws_api_gateway_integration.product_integration_delete, aws_api_gateway_integration.product_integration_get,
@@ -53,7 +49,14 @@ resource "aws_api_gateway_deployment" "demo_backstage" {
   stage_name    = "demo"
 }
 
-##################### INTERGRATION WITH LAMBDA #################
+#resource "aws_api_gateway_stage" "demo_backstage" {
+#  deployment_id = aws_api_gateway_deployment.demo_backstage.id
+#  rest_api_id   = aws_api_gateway_rest_api.demo_backstage.id
+#  stage_name    = "demo"
+#}
+
+
+#####################
 resource "aws_api_gateway_integration" "health_integration" {
   rest_api_id             = aws_api_gateway_rest_api.demo_backstage.id
   resource_id             = aws_api_gateway_resource.url_path["health"].id
@@ -105,7 +108,6 @@ resource "aws_api_gateway_integration" "product_integration_delete" {
   uri                     = aws_lambda_function.lambda_function.invoke_arn
 }
 
-############## PERMISSION TO CALL LAMBDA ###############################
 resource "aws_lambda_permission" "lambda_permission" {
   statement_id  = "AllowMyDemoAPIInvoke"
   action        = "lambda:InvokeFunction"

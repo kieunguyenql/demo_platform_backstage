@@ -1,7 +1,7 @@
 import boto3
 import json
 import logging
-from dependency import CustomEncoder
+from custom_encoder import CustomEncoder
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 

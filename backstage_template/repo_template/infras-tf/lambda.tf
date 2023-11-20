@@ -1,4 +1,3 @@
-########## LAmbda layer ###########
 resource "aws_lambda_layer_version" "lambda_layer" {
   layer_name          = "${var.function_name}-python-packages"
   description         = "Python packages for ${var.function_name}"
@@ -9,8 +8,6 @@ resource "aws_lambda_layer_version" "lambda_layer" {
   }
 }
 
-
-####### Lambda function #######
 resource "aws_lambda_function" "lambda_function" {
 
   function_name = var.function_name
@@ -43,10 +40,39 @@ resource "aws_lambda_function" "lambda_function" {
 }
 
 
-############ cloudwatch logs group for lambda ##############
+############
+
 # This is to optionally manage the CloudWatch Log Group for the Lambda Function.
+# If skipping this resource configuration, also add "logs:CreateLogGroup" to the IAM policy below.
 resource "aws_cloudwatch_log_group" "demo_backstage" {
   name              = "/aws/lambda/${var.function_name}"
   retention_in_days = 1
 }
 
+# See also the following AWS managed policy: AWSLambdaBasicExecutionRole
+data "aws_iam_policy_document" "lambda_logging" {
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "logs:CreateLogGroup",
+      "logs:CreateLogStream",
+      "logs:PutLogEvents",
+    ]
+
+    resources = ["arn:aws:logs:*:*:*"]
+  }
+}
+
+resource "aws_iam_policy" "lambda_logging" {
+  name        = "lambda_logging"
+  path        = "/"
+  description = "IAM policy for logging from a lambda"
+  policy      = data.aws_iam_policy_document.lambda_logging.json
+}
+
+
+resource "aws_iam_role_policy_attachment" "lambda_logs" {
+  role       = aws_iam_role.lambda_role.name
+  policy_arn = aws_iam_policy.lambda_logging.arn
+}

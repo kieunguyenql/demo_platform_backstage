@@ -1,6 +1,4 @@
-variable "function_name" {
-  default= "demo-backstage"
-}
+variable "function_name" {}
 
 variable "handler" {
   default     = "main.lambda_handler"    
@@ -18,12 +16,17 @@ variable "security_group_ids" {
     default = ["sg-0cc4c5c91bcdc307b"]
 }
 
-variable "description" {
-    default= "demo backstage"
-}
+variable "description" {}
 
 variable "compatible_runtimes" {
   type        = list(string)
   description = "Runtime"
   default     = ["python3.10"]
 }
+variable "api_gate_way_name" {}
+
+variable "statefile_name" {}
+
+variable "dynamodb_partition_key" {}
+
+variable "dynamodb_table_name" {}
