@@ -1,3 +1,5 @@
+
+########### Create lambda role
 data "aws_iam_policy_document" "lambda-assume-role-policy" {
   statement {
     actions = ["sts:AssumeRole"]
@@ -14,6 +16,8 @@ resource "aws_iam_role" "lambda_role" {
   assume_role_policy = data.aws_iam_policy_document.lambda-assume-role-policy.json
 }
 
+
+############# IAM policies for lambda ################
 data "aws_iam_policy_document" "common_policies" {
   statement {
     sid = "lambdaEc2Policy"
@@ -49,7 +53,7 @@ resource "aws_iam_role_policy_attachment" "lambda_common_policy_attachment" {
   policy_arn = aws_iam_policy.lambda_common_policy.arn
 }
 
-####################### 
+####################### policies to push logs to cloudwatch logs ############
 data "aws_iam_policy_document" "lambda_logging" {
   statement {
     effect = "Allow"
