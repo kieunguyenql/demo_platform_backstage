@@ -1,4 +1,10 @@
-## security group for comunication within VPC ##############################
+###############EC2-keypair 
+
+resource "aws_key_pair" "demo_backstage" {
+  key_name   = "demo_backstage"
+  public_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMD6yqMrsOedXCmHCplamut5ZVs0nwe0gHv8iQNOrwTG kieunv"
+}
+## security group for EC2 ##############################
 resource "aws_security_group" "demo_backstage_ecs_ec2_allow_internal" {
   name        = "ecs_ec2_allow_internal"
   description = "Allow internal inbound traffic"
@@ -22,7 +28,7 @@ resource "aws_security_group" "demo_backstage_ecs_ec2_allow_internal" {
   }
 }
 
-## SG for ALB 
+################## Security for ELB ####################
 resource "aws_security_group" "demo_backstage_external_ecs_alb" {
   name        = "allow_external_access_web"
   description = "Allow HTTP/HTTPS inbound traffic"
@@ -65,13 +71,6 @@ data "aws_ami" "demo_backstage_aws_optimized_ecs" {
   owners = ["591542846629"] # AWS
 }
 
-#### EC2-keypair 
-
-resource "aws_key_pair" "demo_backstage" {
-  key_name   = "demo_backstage"
-  public_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMD6yqMrsOedXCmHCplamut5ZVs0nwe0gHv8iQNOrwTG kieunv"
-}
-
 ###########launch configuration ###################
 resource "aws_launch_configuration" "demo_backstage_ecs_asg" {
   iam_instance_profile        = aws_iam_instance_profile.demo_backstage_ecs_agent.arn
@@ -105,7 +104,7 @@ resource "aws_autoscaling_group" "demo_backstage" {
 #  target_group_arns = [aws_lb_target_group.demo_backstage_ecs_tgp.arn]
 }
 
-######## ALB for EC2
+######## ALB for tasks ##################
 
 resource "aws_lb" "demo_backstage_ecs_alb" {
   name               = "demo-backstage-alb"
