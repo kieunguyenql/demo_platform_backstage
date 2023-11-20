@@ -180,17 +180,8 @@ resource "aws_ecs_task_definition" "demo_backstage_task" {
       {"name": "POSTGRES_USER", "value": "postgres"},
       {"name": "POSTGRES_PASSWORD", "value": "xxxxxx"},
       {"name": "GITHUB_TOKEN", "value": "xxxxx"},
-      {"name": "AUTH_GITHUB_CLIENT_ID", "value": "arbirarty-value"},
-      {"name": "AUTH_GITHUB_CLIENT_SECRET", "value": "arbirarty-value"},
-      {"name": "ACCESS_KEY_ID", "value": "xxxxx"},
-      {"name": "SECRET_ACCESS_KEY", "value": "xxxxx"},
       {"name": "HOST_URL", "value": "xxxxx"},
       {"name": "APP_DOMAIN", "value": "xxxx"},
-      {"name": "APP_URL", "value": "xxxxx"},
-      {"name": "BACKEND_URL", "value": "xxxxx"},
-      {"name": "POSTGRES_PORT", "value": "5432"},
-      {"name": "DEFAULT_REGION", "value": "ap-southeast-2"},
-      {"name": "BUCKET_NAME", "value": "xxxxxxx"}
     ],
     logConfiguration = {
     logDriver = "awslogs"
