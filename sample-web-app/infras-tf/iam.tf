@@ -49,8 +49,7 @@ resource "aws_iam_role_policy_attachment" "lambda_common_policy_attachment" {
   policy_arn = aws_iam_policy.lambda_common_policy.arn
 }
 
-#######################
-# See also the following AWS managed policy: AWSLambdaBasicExecutionRole
+####################### 
 data "aws_iam_policy_document" "lambda_logging" {
   statement {
     effect = "Allow"
