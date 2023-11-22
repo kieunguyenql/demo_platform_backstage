@@ -1,5 +1,6 @@
-sample-web-app/infras-tf/.terra*
-sample-web-app/infras-tf/terra*
+initial-sample-web-app/infras-tf/.terra*
+initial-sample-web-app/infras-tf/terra*
 backstageio-app/node_modules
-terraform_ecs_deploy_backstage/demo_backstage_terraform/terra*
-terraform_ecs_deploy_backstage/demo_backstage_terraform/.terra*
+terraform_backstageio_ecs_deployment/terraform_ecs_backstage/terra*
+terraform_backstageio_ecs_deployment/terraform_ecs_backstage/.terra*
+!terraform_backstageio_ecs_deployment/terraform_ecs_backstage/.terraform.lock.hcl

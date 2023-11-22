@@ -1,22 +1,26 @@
-# demo_platform_backstage
+# Demo-backstage
 
-## Getting started
+This is repo which include code for demo backstage
 
-This repo includes initial setting up to run backstage demo
+## Table of Contents
 
-## Integrate with your tools
-- Docker
-- Github action, Gitlab-ci
-- backstage template
-- terraform
-- AWS service
-- python code
+## Introduction
+Backstage is very new tool for platform engineer to manage other develop tools.
+And it helps to create template for developer, make life is easier.
 
-## Test and Deploy
-- To run quick run backstage: goto backstageio-app >> yarn install && yarn dev
-- Create component from template
-- Check cicd running
-***
-## Terraform repo
-- ECS cluster to install backstage
-- Terraform to build infrastructure for sample web app
+## Folder structure
+- backstageio_build:
+   - There is guide to build backstage image to run container
+   - app-config.yaml for build
+   - docker compose to run test after build image
+ - example-template:
+   - template_repo: this is base files which are fetched by backstage, then backstage will pushlish it, create new repo in SCM with all contents of template_repo
+   - template.yaml: This is template.yaml, will import it to backstage 
+- initial-sample-web-app:
+   - infras-tf: terraform code to build sample web-app
+   - sample-web-app python code which is deployed to lambda
+- terraform_backstageio_ecs_deployment:
+   - Module: include terraform vpc module to create vpc
+   - ecs_backstage_terraform: Code to deploy backstage to ecs cluster
+  
+## Installation

@@ -1,3 +1,0 @@
-infras-tf/terr*
-infras-tf/.terr*
-!infras-tf/terraform.tfvars

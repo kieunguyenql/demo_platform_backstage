@@ -75,7 +75,7 @@ data "aws_ami" "demo_backstage_aws_optimized_ecs" {
 resource "aws_launch_configuration" "demo_backstage_ecs_asg" {
   iam_instance_profile        = aws_iam_instance_profile.demo_backstage_ecs_agent.arn
   image_id                    = data.aws_ami.demo_backstage_aws_optimized_ecs.id
-  instance_type               = "t2.small"
+  instance_type               = "t2.medium"
   key_name                    = aws_key_pair.demo_backstage.key_name
 
   lifecycle {
@@ -95,7 +95,7 @@ resource "aws_launch_configuration" "demo_backstage_ecs_asg" {
 ### ECS ec2-worker autoscaling group ###
 resource "aws_autoscaling_group" "demo_backstage" {
   name = "demo_backstage"
-  max_size = 5
+  max_size = 1
   min_size = 0
   desired_capacity = 1
   launch_configuration = aws_launch_configuration.demo_backstage_ecs_asg.name
@@ -119,6 +119,9 @@ resource "aws_lb_target_group" "demo_backstage_ecs_tgp" {
   port     = 7007
   protocol = "HTTP"
   vpc_id   = module.demo_vpc.aws_vpc_id
+  health_check {
+    port   = 7007
+  }
 }
 
 resource "aws_autoscaling_attachment" "demo_backstage_tgp_attachment" {
@@ -135,21 +138,17 @@ resource aws_lb_listener "demo_backstage_ecs_backstage" {
     target_group_arn = aws_lb_target_group.demo_backstage_ecs_tgp.arn
 }
 }
-
 ##################################### ECS_cluster ########################
 resource "aws_ecs_cluster" "demo_backstage_ecs_cluster" {
     name  = var.project_name
 }
-
 # Capacity Provider acts as a link between ECS Cluster and Autoscaling Group. Each ECS Cluster can use multiple Capacity Providers and thus different Autoscaling Groups
 resource "aws_ecs_capacity_provider" "demo_backstage_ecs" {
   name = "demo-backstage-capacity-provider"
-
   auto_scaling_group_provider {
     auto_scaling_group_arn = aws_autoscaling_group.demo_backstage.arn
     managed_scaling {
       status          = "ENABLED"
-      target_capacity = 2
     }
   }
 }
@@ -167,8 +166,8 @@ resource "aws_cloudwatch_log_group" "demo_backstage_log_group" {
 
 resource "aws_ecs_task_definition" "demo_backstage_task" {
   family                   = "demo_backstage-task"
-  cpu                      = 512
-  memory                   = 1024
+  cpu                      = 1024
+  memory                   = 2048
   execution_role_arn       = aws_iam_role.demo_backstage_task_execution_role.arn
   task_role_arn            = aws_iam_role.demo_backstage_ecs_task_iam_role.arn
   container_definitions    = jsonencode([{
@@ -176,12 +175,16 @@ resource "aws_ecs_task_definition" "demo_backstage_task" {
     image       = "${var.backstage_image_url}:${var.backstage_image_tag}"
     essential   = true
     environment: [
-      {"name": "POSTGRES_HOST", "value": "xxxxx"},
+      {"name": "BACKEND_URL", "value": "xxxxxxxxxxxx"},
+      {"name": "APP_DOMAIN", "value": "xxxxxxxxxxxxxxxxx"},
+      {"name": "PGSSLMODE", "value": "no-verify"},
+      {"name": "POSTGRES_HOST", "value": "xxxxxxxxxxxxxxxx"},
+      {"name": "POSTGRES_PORT", "value": "5432"},
       {"name": "POSTGRES_USER", "value": "postgres"},
-      {"name": "POSTGRES_PASSWORD", "value": "xxxxxx"},
-      {"name": "GITHUB_TOKEN", "value": "xxxxx"},
-      {"name": "HOST_URL", "value": "xxxxx"},
-      {"name": "APP_DOMAIN", "value": "xxxx"},
+      {"name": "POSTGRES_PASSWORD", "value": "xxxxxxxx"},
+      {"name": "GITHUB_TOKEN", "value": "xxxxxxxxxxxx"},
+      {"name": "AUTH_GITHUB_CLIENT_ID", "value": "xxxxxxxxxxxxx"},
+      {"name": "AUTH_GITHUB_CLIENT_SECRET", "value": "xxxxxxxxxxxxxxxxxxxx"},
     ],
     logConfiguration = {
     logDriver = "awslogs"
@@ -205,4 +208,7 @@ resource "aws_ecs_service" "demo_backstage_ecs_service" {
   cluster         = aws_ecs_cluster.demo_backstage_ecs_cluster.id
   task_definition = aws_ecs_task_definition.demo_backstage_task.arn
   desired_count   = 1
-}
+  force_new_deployment = true
+
+  }
+

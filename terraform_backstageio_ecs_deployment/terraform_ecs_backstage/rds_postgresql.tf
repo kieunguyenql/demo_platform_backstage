@@ -38,5 +38,5 @@ resource "aws_db_instance" "demo_backstage" {
   instance_class            = "db.t3.micro"
   maintenance_window        = "sun:03:00-sun:04:00"
   username                  = "postgres"
-  password                  = "xxxxxxx"
+  password                  = "backstage"
 }

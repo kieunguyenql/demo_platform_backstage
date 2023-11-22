@@ -1,20 +1,23 @@
 version: '3'
-
 services:
   backstage:
-    image: 204173949765.dkr.ecr.ap-southeast-2.amazonaws.com/demo-backstage:latest
+    image: demo-backstage:1.0.0
     ports:
       - "7007:7007"
       - "3000:3000"
     depends_on:
       - postgres
     environment:
-      APP_DOMAIN: "localhost"
+      BACKEND_URL: "http://xxxx:7007"
+      APP_DOMAIN: "http://xxxx:3000"
+      PGSSLMODE: allow
       POSTGRES_HOST: postgres
       POSTGRES_PORT: 5432
       POSTGRES_USER: backstage
-      POSTGRES_PASSWORD: backstage
-      GITHUB_TOKEN: xxxxxxxx
+      POSTGRES_PASSWORD: xxxx
+      GITHUB_TOKEN: xxxxxxxxxxxx
+      AUTH_GITHUB_CLIENT_ID: xxxxxxxxxxxxxx
+      AUTH_GITHUB_CLIENT_SECRET: xxxxxxxxxxxxxx
 
   postgres:
     image: postgres
@@ -22,6 +25,6 @@ services:
       POSTGRES_DB: postgres
       POSTGRES_PORT: 5432
       POSTGRES_USER: backstage
-      POSTGRES_PASSWORD: backstage
+      POSTGRES_PASSWORD: xxxxxxxx
     ports:
       - "5432:5432"
