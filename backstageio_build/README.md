@@ -21,7 +21,7 @@ If the system is not directly accessible over your network the following ports n
 4. yarn install
 5. yarn build:backend # build with app-config.yaml
 6. docker image build . -f packages/backend/Dockerfile --tag demo-backstage:1.0.0
-7. make tag 
+7. tag for image
 8. push to registry
 
 ###### Test dockerimage by docker-compose
